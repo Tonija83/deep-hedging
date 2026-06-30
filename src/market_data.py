@@ -4,8 +4,8 @@ import pandas as pd
 
 def load_market_data(
     ticker="^ATX",
-    start="2015-01-01",
-    end="2025-12-31"
+    start="2026-01-01",
+    end="2026-06-29"
 ):
     """
     Downloads historical market data.
