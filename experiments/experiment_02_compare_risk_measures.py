@@ -1,58 +1,86 @@
+"""
+=========================================================
+Experiment 02
+
+Comparison of Risk Measures
+
+Variance
+VaR
+CVaR
+
+Deep Hedging PhD Project
+=========================================================
+"""
+
 import numpy as np
 
+from config import *
+
 # --------------------------------------------------------
-# Simulated Portfolio Profits
+# Load Monte Carlo simulation
 # --------------------------------------------------------
 
-np.random.seed(42)
-
-profits = np.random.normal(
-    loc=2,
-    scale=10,
-    size=100000
+prices = np.load(
+    f"{RESULT_FOLDER}/market_paths.npy"
 )
 
-losses = -profits
+# --------------------------------------------------------
+# Portfolio Loss
+# --------------------------------------------------------
+
+initial_price = prices[0]
+
+terminal_price = prices[-1]
+
+portfolio_profit = terminal_price - initial_price
+
+loss = -portfolio_profit
 
 # --------------------------------------------------------
 # Variance
 # --------------------------------------------------------
 
-variance = np.var(losses)
+variance = np.var(loss)
 
 # --------------------------------------------------------
-# Value at Risk
+# VaR
 # --------------------------------------------------------
-
-alpha = 0.95
 
 VaR = np.quantile(
-    losses,
-    alpha
+    loss,
+    CVAR_ALPHA
 )
 
 # --------------------------------------------------------
-# Conditional Value at Risk
+# CVaR
 # --------------------------------------------------------
 
-CVaR = losses[
-    losses >= VaR
+CVaR = loss[
+    loss >= VaR
 ].mean()
 
 # --------------------------------------------------------
-# Output
+# Expected Loss
 # --------------------------------------------------------
 
-print("="*45)
+expected_loss = np.mean(loss)
+
+# --------------------------------------------------------
+# Print Results
+# --------------------------------------------------------
+
+print("="*50)
 
 print("Comparison of Risk Measures")
 
-print("="*45)
+print("="*50)
 
-print(f"Variance : {variance:.4f}")
+print(f"Expected Loss : {expected_loss:.4f}")
 
-print(f"VaR ({alpha:.0%}) : {VaR:.4f}")
+print(f"Variance      : {variance:.4f}")
 
-print(f"CVaR ({alpha:.0%}) : {CVaR:.4f}")
+print(f"VaR           : {VaR:.4f}")
 
-print("="*45)
+print(f"CVaR          : {CVaR:.4f}")
+
+print("="*50)
