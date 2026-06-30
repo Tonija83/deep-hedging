@@ -1,17 +1,3 @@
-"""
-=========================================================
-Experiment 02
-
-Comparison of Risk Measures
-
-Variance
-VaR
-CVaR
-
-Deep Hedging PhD Project
-=========================================================
-"""
-
 import numpy as np
 
 from config import *
