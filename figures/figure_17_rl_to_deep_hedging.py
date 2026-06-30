@@ -2,28 +2,115 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 
 # --------------------------------------------------
-# Figure
+# Figure setup
 # --------------------------------------------------
 
 fig, ax = plt.subplots(figsize=(14, 7))
 
 ax.set_xlim(0, 14)
 ax.set_ylim(0, 10)
-
 ax.axis("off")
 
 # --------------------------------------------------
-# Helper function
+# Colors
 # --------------------------------------------------
 
-def box(x, y, w, h, text, fontsize=12):
+RL_COLOR = "#DCEEFF"
+HEDGE_COLOR = "#FFE7D6"
+MID_COLOR = "#EAEAEA"
+EDGE_COLOR = "#333333"
+
+# --------------------------------------------------
+# Box helper (strukturierte Box mit Inhalt)
+# --------------------------------------------------
+
+def labeled_box(x, y, w, h, title, applications, formula, facecolor="white"):
+
     rect = FancyBboxPatch(
         (x, y),
         w,
         h,
-        boxstyle="round,pad=0.3",
-        linewidth=2,
-        facecolor="white"
+        boxstyle="round,pad=0.5,rounding_size=0.08",
+        linewidth=1.5,
+        edgecolor=EDGE_COLOR,
+        facecolor=facecolor
+    )
+    ax.add_patch(rect)
+
+    # Title
+    ax.text(
+        x + w / 2,
+        y + h * 0.78,
+        title,
+        ha="center",
+        va="center",
+        fontsize=13,
+        fontweight="bold"
+    )
+
+    # Applications
+    ax.text(
+        x + w / 2,
+        y + h * 0.45,
+        applications,
+        ha="center",
+        va="center",
+        fontsize=11
+    )
+
+    # Formula
+    ax.text(
+        x + w / 2,
+        y + h * 0.15,
+        formula,
+        ha="center",
+        va="center",
+        fontsize=16
+    )
+
+# --------------------------------------------------
+# Left: Reinforcement Learning
+# --------------------------------------------------
+
+labeled_box(
+    0.7,
+    6.3,
+    4,
+    2.8,
+    "Classical Reinforcement Learning",
+    "AlphaGo\nRobotics\nAutonomous Driving\nResource Allocation",
+    r"$\max_{\pi}\; \mathbb{E}[R]$",
+    facecolor=RL_COLOR
+)
+
+# --------------------------------------------------
+# Right: Deep Hedging
+# --------------------------------------------------
+
+labeled_box(
+    9.3,
+    6.3,
+    4,
+    2.8,
+    "Deep Hedging",
+    "Options\nDerivatives\nPortfolio Hedging\nRisk Management",
+    r"$\min_{\theta}\; \rho(X_T^{\theta})$",
+    facecolor=HEDGE_COLOR
+)
+
+# --------------------------------------------------
+# Middle blocks
+# --------------------------------------------------
+
+def simple_box(x, y, w, h, text):
+    rect = FancyBboxPatch(
+        (x, y),
+        w,
+        h,
+        boxstyle="round,pad=0.4,rounding_size=0.08",
+        linewidth=1.5,
+        edgecolor=EDGE_COLOR,
+        facecolor=MID_COLOR
     )
     ax.add_patch(rect)
 
@@ -33,151 +120,34 @@ def box(x, y, w, h, text, fontsize=12):
         text,
         ha="center",
         va="center",
-        fontsize=fontsize
+        fontsize=12,
+        fontweight="bold"
     )
 
-# --------------------------------------------------
-# Left side
-# --------------------------------------------------
-
-box(
-    0.7,
-    6.3,
-    4,
-    2.8,
-    "Classical\nReinforcement Learning",
-    fontsize=13
-)
-
-ax.text(
-    2.7,
-    5.8,
-    "Applications",
-    ha="center",
-    fontsize=12,
-    fontweight="bold"
-)
-
-ax.text(
-    2.7,
-    4.8,
-    "• AlphaGo\n"
-    "• Robotics\n"
-    "• Autonomous Driving\n"
-    "• Resource Allocation",
-    ha="center",
-    fontsize=11
-)
-
-ax.text(
-    2.7,
-    2.3,
-    r"$\max_{\pi}\; \mathbb{E}[R]$",
-    fontsize=18,
-    ha="center"
-)
+simple_box(5.4, 4.2, 3.2, 1.4, "Policy Learning")
+simple_box(5.4, 2.0, 3.2, 1.4, "Neural Networks")
 
 # --------------------------------------------------
-# Right side
+# Arrows
 # --------------------------------------------------
-
-box(
-    9.3,
-    6.3,
-    4,
-    2.8,
-    "Deep Hedging",
-    fontsize=13
-)
-
-ax.text(
-    11.3,
-    5.8,
-    "Applications",
-    ha="center",
-    fontsize=12,
-    fontweight="bold"
-)
-
-ax.text(
-    11.3,
-    4.8,
-    "• Options\n"
-    "• Derivatives\n"
-    "• Portfolio Hedging\n"
-    "• Risk Management",
-    ha="center",
-    fontsize=11
-)
-
-ax.text(
-    11.3,
-    2.3,
-    r"$\min_{\theta}\; \rho(X_T^{\theta})$",
-    fontsize=18,
-    ha="center"
-)
-
-# --------------------------------------------------
-# Middle transition
-# --------------------------------------------------
-
-box(
-    5.4,
-    4.2,
-    3.2,
-    1.4,
-    "Policy Learning",
-    fontsize=12
-)
-
-box(
-    5.4,
-    2.0,
-    3.2,
-    1.4,
-    "Neural Networks",
-    fontsize=12
-)
 
 arrow = dict(
-    arrowstyle="->",
-    linewidth=2
+    arrowstyle="-|>",
+    linewidth=2,
+    color="#444444",
+    shrinkA=0,
+    shrinkB=0
 )
 
 # left -> middle
+ax.annotate("", xy=(5.4, 7.7), xytext=(4.7, 7.7), arrowprops=arrow)
 
-ax.annotate(
-    "",
-    xy=(5.4, 7.7),
-    xytext=(4.7, 7.7),
-    arrowprops=arrow
-)
-
-# middle vertical
-
-ax.annotate(
-    "",
-    xy=(7, 5.6),
-    xytext=(7, 6.3),
-    arrowprops=arrow
-)
-
-ax.annotate(
-    "",
-    xy=(7, 3.4),
-    xytext=(7, 4.2),
-    arrowprops=arrow
-)
+# vertical flow
+ax.annotate("", xy=(7, 5.6), xytext=(7, 6.3), arrowprops=arrow)
+ax.annotate("", xy=(7, 3.4), xytext=(7, 4.2), arrowprops=arrow)
 
 # middle -> right
-
-ax.annotate(
-    "",
-    xy=(9.3, 7.7),
-    xytext=(8.6, 7.7),
-    arrowprops=arrow
-)
+ax.annotate("", xy=(9.3, 7.7), xytext=(8.6, 7.7), arrowprops=arrow)
 
 # --------------------------------------------------
 # Bottom statement
@@ -196,9 +166,9 @@ ax.text(
     ha="center",
     fontsize=12,
     bbox=dict(
-        boxstyle="round",
-        facecolor="#F0F0F0",
-        edgecolor="black"
+        boxstyle="round,pad=0.5",
+        facecolor="#F2F2F2",
+        edgecolor=EDGE_COLOR
     )
 )
 
@@ -207,22 +177,18 @@ ax.text(
 # --------------------------------------------------
 
 plt.title(
-    "From Reinforcement Learning to Deep Hedging",
+    "Vom Reinforcement Learning zum Deep Hedging",
     fontsize=18,
     pad=20
 )
 
 plt.tight_layout()
 
-plt.savefig(
-    "figure_17_rl_to_deep_hedging.png",
-    dpi=300,
-    bbox_inches="tight"
-)
+# --------------------------------------------------
+# Save outputs
+# --------------------------------------------------
 
-plt.savefig(
-    "figure_17_rl_to_deep_hedging.pdf",
-    bbox_inches="tight"
-)
+plt.savefig("figure_rl_to_deep_hedging.png", dpi=300, bbox_inches="tight")
+plt.savefig("figure_rl_to_deep_hedging.pdf", bbox_inches="tight")
 
 plt.show()
